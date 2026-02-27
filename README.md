@@ -38,7 +38,7 @@ Navigation Launching:
     $ ros2 launch agv_navigation agv_navigation.launch.py
 
 
-![Image of AGV Navigation](https://github.com/inomuh/agv/blob/main/images/agv_nav_goal.png)
+<img width="1766" height="1121" alt="image" src="https://github.com/user-attachments/assets/94f21047-0e8e-4e0c-bc69-43ddf163ea85" />
     
 -----------------------------------------------------------------------------------------------------------------------
 Requirements:
