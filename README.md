@@ -22,6 +22,8 @@ https://github.com/inomuh/agvsim_v2_ros
 
 Launch Command:
 ---------------
+### Warning !!!
+Before using launch commands, you must unzip ~/agv/agv_description/meshes/OTAv07_meshes/OTA-v0.7.tar.xz file..
 -------------------------------------------------------------------------------------------------------------
 Gazebo Launching:
 
