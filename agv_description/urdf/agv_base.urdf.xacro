@@ -9,16 +9,17 @@
       <visual>
         <origin xyz="0 0 -0.1625" rpy=" 0 0 0"/>
         <geometry>
-          <mesh filename="package://agv_description/meshes/OTAv07_meshes/OTA-v0.7.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="file://$(find agv_description)/meshes/OTAv07_meshes/OTA-v0.7.stl" scale="0.001 0.001 0.001"/>
         </geometry>
       </visual>    
       
       <collision>
         <origin xyz="0 0 -0.075" rpy=" 0 0 0"/>
         <geometry>
-          <!--<mesh filename="package://agv_description/meshes/OTAv07_meshes/OTA-v0.7.stl" scale="0.001 0.001 0.001"/> -->
+          <!--<mesh filename="file://$(find agv_description)/meshes/OTAv07_meshes/OTA-v0.7.stl" scale="0.001 0.001 0.001"/> -->
           <box size="1.02 0.72 0.14"/>
         </geometry>
+        
       </collision>    
     
       <xacro:box_inertial x="1.02605" y="0.728"  z="0.3" mass="1.0" />
@@ -27,14 +28,13 @@
     <gazebo reference="base_link">
       <material value="Gazebo/Orange"/>
     </gazebo>
-    
-    <!-- Laser -->
+
     <link name="scan_link">
       
       <visual>
         <origin xyz="0 0 0" rpy="1.570796 0 -1.570796"/>
         <geometry>
-          <mesh filename="package://agv_description/meshes/OTAv07_meshes/S30B-XXXXXX.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="file://$(find agv_description)/meshes/OTAv07_meshes/S30B-XXXXXX.stl" scale="0.001 0.001 0.001"/>
         </geometry>
       </visual>		
 
@@ -53,52 +53,48 @@
       <child link="scan_link"/>	 
       <axis xyz="0 0 1"/>    
     </joint>       
-    
+
+    <!-- Laser -->
     <gazebo reference="scan_link">
-      <material value="Gazebo/DarkGray"/>
-      <sensor type="ray" name="laser_scan">
-      	<tf_prefix></tf_prefix>
-        <pose>0 0 0 0 0 0</pose>
-        <visualize>false</visualize>
-        <update_rate>40</update_rate>
-        <ray>
-          <scan>
-            <horizontal>
-              <samples>720</samples>
-              <resolution>1</resolution>
-              <min_angle>-1.570796</min_angle>	<!-- -2.35619 -->
-              <max_angle>1.570796</max_angle>	<!--  2.35619 -->
-            </horizontal>
-          </scan>
-          <range>
-            <min>0.10</min>
-            <max>30.0</max>
-            <resolution>0.03</resolution>
-          </range>
-          
-          <noise>
-            <type>gaussian</type>
-            <mean>0.0</mean>
-            <stddev>0.01</stddev>
-          </noise>
-        </ray>
-        
-        <plugin name="laser_scan_plugin" filename="libgazebo_ros_laser.so">
-            <topicName>laser</topicName>
-            <frameName>scan_link</frameName>
-            <tf_prefix>/</tf_prefix>
-        </plugin>
+    <material value="Gazebo/DarkGray"/>
+    <sensor name="lidar" type="gpu_lidar">
+         <always_on>true</always_on>
+         <visualize>true</visualize>
+         <pose>0 0 0 0 0 0</pose>
+         <update_rate>40</update_rate>
+         <topic>laser</topic>
+         <gz_frame_id>scan_link</gz_frame_id>
+         <lidar>
+            <scan>
+               <horizontal>
+                  <samples>720</samples>
+                  <update_rate>10</update_rate>
+                  <min_angle>-1.570796</min_angle>
+                  <max_angle>1.570796</max_angle>
+               </horizontal>
+            </scan>
+            <range>
+               <min>0.1</min>
+               <max>30</max>
+               <resolution>0.03</resolution>
+            </range>
+            <noise>
+               <type>gaussian</type>
+               <mean>0.0</mean>
+               <stddev>0.01</stddev>
+            </noise>
+         </lidar>
       </sensor>
-    </gazebo>  
+      </gazebo>
 
     <!-- Zed Camera -->
 
-
     <link name="zed_camera">
       <visual>
-          <origin xyz="0 0 0" rpy="0 0 0"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/> 
+
           <geometry>
-            <mesh filename="package://agv_description/meshes/OTAv07_meshes/zed.stl" />
+            <mesh filename="file://$(find agv_description)/meshes/OTAv07_meshes/zed.stl" />
           </geometry>
           <material name="black">
             <color rgba="1 1 1 1"/>
@@ -114,57 +110,48 @@
             <color rgba="0.8 0.8 0.8 0.8"/>
           </material>
       </collision> -->
-
     </link>
 
     <joint name="zed_camera_joint" type="fixed">
       <parent link="base_link"/>
       <child link="zed_camera"/>
-      <origin xyz="0.49 0 0.175" rpy="0 0 0" />
+       <origin xyz="0.49 0 0.175" rpy="0 0 0" />
     </joint>
 
-    <gazebo reference="zed_camera">
-      <sensor type="camera" name="camera">
-        <update_rate>30.0</update_rate>
-        <camera name="head">
-          <horizontal_fov>1.3962634</horizontal_fov>
-          <image>
+  <gazebo reference="zed_camera">
+  <sensor name="camera" type="camera">
+         <always_on>true</always_on>
+         <update_rate>30</update_rate>
+         <visualize>true</visualize>
+         <topic>image_raw</topic>
+         <gz_frame_id>zed_camera</gz_frame_id>
+         <camera name="head">
+          <camera_info_topic>camera_info</camera_info_topic>
+            <horizontal_fov>1.3962634</horizontal_fov>
+            <image>
             <width>640</width>
             <height>480</height>
             <format>R8G8B8</format>
           </image>
-          <clip>
+            <clip>
             <near>0.02</near>
             <far>300</far>
           </clip>
-          <noise>
+            <!-- <optical_frame_id>camera_optical_frame</optical_frame_id> -->
+            <distortion>
+            <k1>0</k1>
+            <k2>0</k2>
+            <k3>0</k3>
+            </distortion>
+             <noise>
             <type>gaussian</type>
-            <!-- Noise is sampled independently per pixel on each frame.
-                That pixel's noise value is added to each of its color
-                channels, which at that point lie in the range [0,1]. -->
             <mean>0.0</mean>
             <stddev>0.007</stddev>
           </noise>
-        </camera>
-
-        <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
-          <alwaysOn>true</alwaysOn>
-          <updateRate>0.0</updateRate>
-          <cameraName>camera</cameraName>
-          <imageTopicName>image_raw</imageTopicName>
-          <cameraInfoTopicName>camera_info</cameraInfoTopicName>
-          <frameName>zed_camera</frameName>
-          <hackBaseline>0.07</hackBaseline>
-          <distortionK1>0.0</distortionK1>
-          <distortionK2>0.0</distortionK2>
-          <distortionK3>0.0</distortionK3>
-          <distortionT1>0.0</distortionT1>
-          <distortionT2>0.0</distortionT2>
-        </plugin>
-
+         </camera>
       </sensor>
     </gazebo>
-    
+
     <!-- IMU Link -->
     <link name="imu_link"/>
     
@@ -173,6 +160,6 @@
       <child link="imu_link"/>
       <origin xyz="0.0 0 0.068" rpy="0 0 0"/>
     </joint>
-
+    
   </xacro:macro>      
 </robot>

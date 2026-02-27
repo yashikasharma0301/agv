@@ -26,13 +26,10 @@
 	<xacro:agv_swivel xyz_caster="-0.37 -0.22 -0.048" rpy_caster="0 0 0" side="back_right"/>
 	<xacro:agv_swivel xyz_caster="-0.37 0.22 -0.048" rpy_caster="0 0 0" side="back_left"/>
 
-	<!-- Motor plugin -->
 	<xacro:agv_diff_drive />
 
-	<!-- Joints plugin -->
 	<xacro:agv_joints_state_publisher />
 
-	<!-- IMU Plugin-->
 	<xacro:agv_imu />
 
 </robot>

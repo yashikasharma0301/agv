@@ -6,7 +6,7 @@
       <visual>
         <origin xyz="0 0 0" rpy=" 0 0 1.570796"/>
         <geometry>
-          <mesh filename="package://agv_description/meshes/OTAv07_meshes/AnaTeker.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="file://$(find agv_description)/meshes/OTAv07_meshes/AnaTeker.stl" scale="0.001 0.001 0.001"/>
         </geometry>
       </visual>	 
       
@@ -28,6 +28,10 @@
     </joint> 
 
     <gazebo reference="wheel_${side}_link">
+    <!-- <mu1>1.5</mu1>
+  <mu2>1.5</mu2>
+  <kp>1000000</kp>
+  <kd>10</kd> -->
       <material value="Gazebo/Green"/>
     </gazebo>     
 

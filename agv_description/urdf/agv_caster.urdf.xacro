@@ -7,7 +7,7 @@
       <visual>
         <origin xyz="0 0 0" rpy=" 0 0 0"/>
         <geometry>
-          <mesh filename="package://agv_description/meshes/OTAv07_meshes/SarhosTeker.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="file://$(find agv_description)/meshes/OTAv07_meshes/SarhosTeker.stl" scale="0.001 0.001 0.001"/>
         </geometry>
       </visual>
 
@@ -52,6 +52,12 @@
       <parent link="caster_${side}_link"/>
       <child link="caster_wheel_${side}_link"/>
     </joint>  
-  
+
+    <!-- <gazebo reference="caster_wheel_${side}_link">
+    <mu1>0.001</mu1>
+    <mu2>0.001</mu2>
+  </gazebo> -->
+
+
   </xacro:macro>
 </robot>
